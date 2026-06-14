@@ -39,6 +39,8 @@ fun SettingsScreen(
     val secureMode by viewModel.secureMode.collectAsStateWithLifecycle()
     val pinLock by viewModel.pinLock.collectAsStateWithLifecycle()
     val biometrics by viewModel.biometrics.collectAsStateWithLifecycle()
+    val webServerEnabled by viewModel.webServerEnabled.collectAsStateWithLifecycle()
+    val serverUrl by viewModel.serverUrl.collectAsStateWithLifecycle()
 
     val biometricHandler = rememberBiometricHandler(
         onAuthSuccess = viewModel::toggleBiometrics
@@ -71,6 +73,9 @@ fun SettingsScreen(
             val promptData = if (it) setupPromptData else disablePromptData
             biometricHandler.requestBiometrics(promptData)
         },
+        webServerEnabled = webServerEnabled,
+        onWebServerChange = viewModel::toggleWebServer,
+        serverUrl = serverUrl,
         onThemeNavigate = onThemeNavigate
     )
 }
@@ -86,6 +91,9 @@ fun SettingsScreen(
     showBiometrics: Boolean,
     biometrics: Boolean,
     onBiometricsChange: (Boolean) -> Unit,
+    webServerEnabled: Boolean,
+    onWebServerChange: (Boolean) -> Unit,
+    serverUrl: String,
     onThemeNavigate: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -146,6 +154,28 @@ fun SettingsScreen(
                         enabled = pinCode
                     )
                 }
+            }
+            itemGrouped(header = { Text(stringResource(R.string.settings_category_webserver)) }) {
+                SettingsSwitchItem(
+                    onCheckedChange = onWebServerChange,
+                    checked = webServerEnabled,
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_globe),
+                            contentDescription = null
+                        )
+                    },
+                    title = {
+                        Text(stringResource(R.string.settings_prefs_webserver))
+                    },
+                    description = {
+                        if (webServerEnabled && serverUrl.isNotEmpty()) {
+                            Text(serverUrl)
+                        } else {
+                            Text(stringResource(R.string.settings_prefs_webserver_description))
+                        }
+                    }
+                )
             }
             itemGrouped(header = { Text(stringResource(R.string.settings_category_appearance)) }) {
                 SettingsNavigateItem(

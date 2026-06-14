@@ -13,6 +13,7 @@ import com.xinto.mauth.core.otp.transformer.DefaultKeyTransformer
 import com.xinto.mauth.core.otp.transformer.KeyTransformer
 import com.xinto.mauth.core.settings.DefaultSettings
 import com.xinto.mauth.core.settings.Settings
+import com.xinto.mauth.core.webserver.WebServerManager
 import com.xinto.mauth.db.AccountDatabase
 import com.xinto.mauth.domain.AuthRepository
 import com.xinto.mauth.domain.QrRepository
@@ -43,6 +44,7 @@ object MauthDI {
         singleOf(::DefaultSettings) bind Settings::class
         singleOf(::DefaultAuthManager) bind AuthManager::class
         singleOf(::DefaultOtpExporter) bind OtpExporter::class
+        single { WebServerManager(androidContext(), get(), get(), get(), get()) }
     }
 
     val DbModule = module {
@@ -75,6 +77,7 @@ object MauthDI {
     val UiModule = module {
         viewModelOf(::AccountViewModel)
         viewModelOf(::SettingsViewModel)
+
         viewModelOf(::QrScanViewModel)
         viewModelOf(::PinSetupViewModel)
         viewModelOf(::PinRemoveViewModel)

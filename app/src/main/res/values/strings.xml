@@ -93,6 +93,13 @@
     <string name="export_url_copy_success">Successfully copied the OTP URL to the clipboard</string>
     <string name="export_batch_hint">Scan this QR code using any Google Authenticator compatible app</string>
 
+    <string name="settings_category_webserver">Web Access</string>
+    <string name="settings_prefs_webserver">Web Access</string>
+    <string name="settings_prefs_webserver_description">Access codes from any device on your network</string>
+    <string name="webserver_notification_channel">Web Access</string>
+    <string name="webserver_notification_channel_desc">Shows when web access is active</string>
+    <string name="webserver_notification_title">Web Access Active</string>
+
     <string name="about_title">About</string>
     <string name="about_version">Version v%1$s</string>
     <string name="about_links_source">Source</string>

@@ -82,12 +82,38 @@ class DefaultSettings(context: Context) : Settings {
         }
     }
 
+    override fun getWebServerEnabled(): Flow<Boolean> {
+        return preferences.data.map {
+            it[KEY_WEBSERVER_ENABLED] ?: false
+        }
+    }
+
+    override fun getWebServerToken(): Flow<String> {
+        return preferences.data.map {
+            it[KEY_WEBSERVER_TOKEN] ?: ""
+        }
+    }
+
+    override suspend fun setWebServerEnabled(value: Boolean) {
+        preferences.edit {
+            it[KEY_WEBSERVER_ENABLED] = value
+        }
+    }
+
+    override suspend fun setWebServerToken(value: String) {
+        preferences.edit {
+            it[KEY_WEBSERVER_TOKEN] = value
+        }
+    }
+
     private companion object {
         val KEY_SECURE_MODE = booleanPreferencesKey("private_mode")
         val KEY_USE_BIOMETRICS = booleanPreferencesKey("use_biometrics")
         val KEY_SORT_MODE = stringPreferencesKey("sort_mode")
         val KEY_THEME = stringPreferencesKey("theme")
         val KEY_COLOR = stringPreferencesKey("color")
+        val KEY_WEBSERVER_ENABLED = booleanPreferencesKey("webserver_enabled")
+        val KEY_WEBSERVER_TOKEN = stringPreferencesKey("webserver_token")
     }
 
 }
