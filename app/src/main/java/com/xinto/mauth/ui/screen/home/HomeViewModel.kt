@@ -136,11 +136,23 @@ class HomeViewModel(
         }
 
         val parseResult = otp.parseUri(text)
-        if (parseResult !is OtpUriParserResult.Success)
-            return null
-
-        return with(accounts) {
-            parseResult.data.toAccountInfo()
+        return when (parseResult) {
+            is OtpUriParserResult.Success -> with(accounts) {
+                parseResult.data.toAccountInfo()
+            }
+            is OtpUriParserResult.Multipart -> {
+                viewModelScope.launch {
+                    parseResult.data.forEach { data ->
+                        with(accounts) { putAccount(data.toAccountInfo()) }
+                    }
+                    Toast.makeText(application, "Imported ${parseResult.data.size} accounts", Toast.LENGTH_SHORT).show()
+                }
+                null
+            }
+            is OtpUriParserResult.Failure -> {
+                Toast.makeText(application, "Failed to parse QR code", Toast.LENGTH_SHORT).show()
+                null
+            }
         }
     }
 
